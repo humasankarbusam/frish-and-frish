@@ -1,0 +1,324 @@
+/* Frish & Frish — fresh, fast grocery storefront */
+:root{--g:#168447;--g2:#21a45d;--d:#123b2b;--m:#edf8f0;--line:#e2ece5;--ink:#183629;--muted:#6d8175;--surface:#fff;--page:#f8fbf8;--shadow:0 8px 28px rgba(18,59,43,.08)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:86px}
+body{margin:0;background:var(--page);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+button,input,textarea{font:inherit}
+button,a{cursor:pointer}
+a{text-decoration:none;color:inherit}
+button{transition:transform .16s ease,background .16s ease,box-shadow .16s ease}
+button:active{transform:scale(.98)}
+header{height:74px;display:flex;justify-content:space-between;align-items:center;gap:18px;padding:0 clamp(18px,6vw,90px);background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10;backdrop-filter:blur(14px)}
+.logo{font-size:20px;font-weight:950;letter-spacing:.2px;white-space:nowrap}
+.logo i,em{color:var(--g);font-style:normal}
+nav{display:flex;gap:28px;color:#557064;font-weight:650;font-size:14px}
+nav a:hover{color:var(--g)}
+header button{background:var(--m);border:1px solid #d9eddf;border-radius:13px;padding:11px 15px;color:var(--d);font-weight:800}
+header button:hover{background:#dff3e5}
+#count{display:inline-grid;place-items:center;min-width:23px;height:23px;padding:0 5px;margin-left:4px;background:var(--g);color:#fff;border-radius:8px}
+.hero{padding:clamp(44px,7vw,90px) clamp(20px,8vw,120px);background:radial-gradient(ellipse at 80% 15%,#d4f1dc 0,transparent 36%),linear-gradient(125deg,#f4fff6,#e6f7eb);display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(25px,5vw,70px);align-items:center;overflow:hidden}
+.hero small,section>small{color:var(--g);font-weight:900;letter-spacing:1.4px;font-size:11px}
+.hero h1{font-size:clamp(43px,6vw,76px);letter-spacing:-2.7px;line-height:.99;margin:20px 0 18px;max-width:650px}
+.hero p{font-size:clamp(16px,1.7vw,19px);color:#5b7165;line-height:1.7;max-width:510px;margin-bottom:24px}
+.btn{display:inline-flex;justify-content:center;align-items:center;background:var(--g);color:#fff;border:0;border-radius:12px;padding:14px 19px;font-weight:850;box-shadow:0 5px 13px #16844722}
+.btn:hover{background:#116f3b;box-shadow:0 8px 20px #1684472c}
+.light{background:#fff;color:var(--d);border:1px solid var(--line);box-shadow:none}
+.light:hover{background:#f7fcf8}
+.art{min-height:310px;aspect-ratio:1.18;background:linear-gradient(145deg,#fff,#f7fff8);border:1px solid #fff;border-radius:30px;display:grid;align-content:center;justify-items:center;text-align:center;box-shadow:0 24px 65px #123b2b14;font-size:35px;position:relative}
+.art:before{content:"";position:absolute;width:190px;height:190px;border-radius:50%;background:#e7f7eb;z-index:0}
+.art>*{position:relative}
+.art div{font-size:clamp(42px,5vw,64px);line-height:1.45;margin:12px 0}
+.art b{font-size:18px;color:var(--d)}
+section#shop{padding:58px clamp(20px,8vw,120px) 70px}
+h2{font-size:clamp(25px,3vw,34px);letter-spacing:-.8px;margin:9px 0 22px}
+#search{display:block;padding:14px 16px;border:1px solid #dce8df;background:#fff;border-radius:13px;width:min(440px,100%);margin:0 0 20px;outline:none;box-shadow:0 2px 8px #123b2b05}
+#search:focus,label input:focus,label textarea:focus{border-color:#7ac995;box-shadow:0 0 0 3px #16844714}
+#filters{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:22px}
+#filters button{border:1px solid var(--line);background:#fff;color:#4d6758;border-radius:999px;padding:9px 15px;font-weight:750;font-size:13px}
+#filters button:hover{border-color:#9fd5af}
+#filters .active{background:var(--d);border-color:var(--d);color:#fff}
+#products{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.product,.panel{background:var(--surface);border:1px solid var(--line);border-radius:19px;padding:12px;box-shadow:0 2px 8px #123b2b04;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;min-width:0}
+.product:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:#cfe6d5}
+.pic{height:clamp(130px,15vw,190px);background:linear-gradient(145deg,#f0faf2,#e6f5e9);border-radius:14px;display:grid;place-items:center;font-size:54px;overflow:hidden;position:relative}
+.pic img{width:100%;height:100%;object-fit:cover;transition:transform .3s ease}
+.product:hover .pic img{transform:scale(1.04)}
+.product h3{font-size:15px;line-height:1.35;margin:13px 2px 5px}
+.product small{display:block;color:var(--muted);font-size:12px;line-height:1.5;min-height:18px}
+.pfoot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:13px}
+.pfoot b{font-size:17px;color:var(--d)}
+.add{background:#fff;color:var(--g);border:1px solid var(--g);border-radius:10px;padding:6px 15px;font-size:21px;line-height:1.1;font-weight:800}
+.add:hover{background:var(--g);color:#fff}
+#products>p{color:var(--muted);background:#fff;border:1px dashed #cfe0d3;padding:24px;border-radius:14px}
+.how{background:linear-gradient(120deg,#123b2b,#185438);color:#fff;padding:48px clamp(20px,8vw,120px)}
+.how h2{margin-bottom:12px}
+.how p{color:#c2d6ca;line-height:1.7;margin-bottom:0}
+footer{padding:30px clamp(20px,8vw,120px);background:#0b2d20;color:#d5e7dc;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;font-size:13px}
+footer a{color:#a9e7bc}
+footer a:hover{text-decoration:underline}
+.offer{margin:20px clamp(20px,8vw,120px);padding:18px 20px;background:#fff4d5;border:1px solid #f3e3ae;border-radius:15px;color:#684f13}
+.hidden{display:none!important}
+.overlay{position:fixed;inset:0;background:#061e14aa;z-index:20;backdrop-filter:blur(2px)}
+.drawer{position:fixed;z-index:21;right:0;top:0;height:100dvh;overflow:auto;width:min(460px,100%);background:#fff;padding:25px;box-shadow:-15px 0 50px #061e1420}
+.drawer h2{margin-top:22px}
+.close{float:right;border:0;border-radius:50%;width:36px;height:36px;font-size:24px;background:var(--m);color:var(--d)}
+.close:hover{background:#d9f0e0}
+label{display:block;font-size:12px;font-weight:800;margin:13px 0;color:#355544}
+label input,label textarea{display:block;width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;margin-top:6px;outline:none;background:#fff;color:var(--ink)}
+label textarea{min-height:76px;resize:vertical}
+.line{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding:13px 0}
+.qty{display:flex;align-items:center;gap:10px;margin-top:7px;color:var(--muted)}
+.qty button{border:1px solid #d9eddf;background:var(--m);color:var(--d);padding:5px 10px;border-radius:7px;font-weight:800}
+.qty button:hover{background:#d8f0df}
+#place{width:100%;margin-top:12px}
+.muted{color:var(--muted);font-size:12px;line-height:1.6}
+.login{position:fixed;z-index:30;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;padding:28px;border-radius:20px;width:min(400px,92%);box-shadow:0 20px 70px #061e1430}
+.admin{position:fixed;inset:0;z-index:40;background:#f5faf7;display:flex}
+.side{width:230px;flex-shrink:0;background:var(--d);padding:20px;display:flex;flex-direction:column;gap:9px;color:#fff}
+.side b{margin-bottom:12px}
+.side button{border:0;text-align:left;padding:13px;background:#ffffff12;color:#fff;border-radius:9px}
+.side button:hover{background:#ffffff22}
+.side #logout{margin-top:auto}
+.admin main{flex:1;overflow:auto;padding:clamp(15px,3vw,30px);min-width:0}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+.metric{background:#fff;padding:20px;border:1px solid var(--line);border-radius:14px;box-shadow:0 2px 8px #123b2b05}
+.metric b{display:block;font-size:26px;color:var(--d);margin-top:5px}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.tablewrap{overflow:auto;background:#fff;border:1px solid var(--line);border-radius:12px}
+.data{border-collapse:collapse;width:100%;min-width:650px}
+.data td,.data th{padding:12px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}
+.data th{background:#f3faf5;color:#3f5b49}
+.smallbtn{border:0;border-radius:7px;background:var(--m);color:var(--g);padding:7px;margin:2px;font-weight:800}
+.editor{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wide{grid-column:1/-1}
+.gear{position:fixed;right:18px;bottom:18px;z-index:8;border:0;background:var(--d);color:#fff;border-radius:50%;width:48px;height:48px;box-shadow:0 8px 22px #123b2b35;font-size:19px}
+.gear:hover{background:var(--g)}
+@media(max-width:1000px){#products{grid-template-columns:repeat(3,minmax(0,1fr))}.hero{padding-left:6%;padding-right:6%}section#shop{padding-left:6%;padding-right:6%}}
+@media(max-width:800px){header{height:66px;padding:0 16px}.logo{font-size:17px}nav{display:none}.hero{grid-template-columns:1fr;padding:38px 20px;gap:25px}.hero h1{letter-spacing:-1.7px}.art{min-height:220px;max-height:280px}.art:before{width:145px;height:145px}section#shop{padding:42px 16px 50px}#products{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.product{padding:9px;border-radius:15px}.pic{height:clamp(115px,35vw,170px)}.product h3{font-size:14px}.pfoot b{font-size:15px}.add{padding:6px 12px}.how{padding:36px 20px}footer{padding:26px 20px}.side{width:62px;padding:10px 5px}.side b,.side button{font-size:0}.side button:before{content:"•";font-size:20px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.editor{grid-template-columns:1fr}.wide{grid-column:auto}.admin main{padding:14px}}
+@media(max-width:380px){.logo{font-size:15px}header button{padding:9px;font-size:13px}.hero h1{font-size:41px}#products{gap:8px}.pic{height:112px}.product h3{font-size:13px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+
+.pic img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
+/* Frish & Frish premium grocery design refresh */
+:root{--g:#078447;--g2:#16a05b;--d:#073b2d;--m:#edf7ef;--line:#e3ebe5;--ink:#123a2c;--muted:#687d72;--page:#fbfcfa;--shadow:0 10px 30px rgba(7,59,45,.09)}
+header{min-height:78px;height:auto;gap:22px;padding:12px clamp(18px,4.8vw,78px);display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:clamp(18px,2vw,25px);color:#073b2d;letter-spacing:.1px}nav{gap:clamp(16px,2.7vw,42px);font-size:15px;color:#163c2e}nav a{padding:8px 0}header button{white-space:nowrap;border-radius:999px;padding:10px 14px}
+#search{display:block;padding:12px 18px;border:1px solid #dce8df;background:#f7f8f7;border-radius:999px;width:min(340px,100%);margin:0;outline:none}
+.hero{position:relative;isolation:isolate;min-height:490px;padding:clamp(38px,5vw,76px) clamp(22px,6.3vw,104px);grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:clamp(18px,3vw,48px);background:linear-gradient(100deg,#f4f9e9 0%,#edf6df 45%,#d8edb9 100%)}
+.hero h1{font-size:clamp(42px,5.2vw,76px);line-height:1.02;letter-spacing:-2.5px;color:#073b2d;margin:18px 0}.hero p{color:#294d3c;line-height:1.55}.hero .btn{border-radius:16px;padding:15px 20px;margin:0 9px 8px 0}
+.art{min-height:320px;max-height:480px;width:100%;aspect-ratio:1.22;overflow:hidden;border:0;border-radius:24px;display:block;position:relative;background:#e4f1d9;box-shadow:0 18px 42px rgba(7,59,45,.14);font-size:0}.art:before{display:none}.art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;border-radius:24px}
+section#shop{padding:38px clamp(20px,4.8vw,78px) 64px}h2{color:#073b2d}#filters button{padding:10px 17px}#products{grid-template-columns:repeat(5,minmax(0,1fr));gap:18px}.product{border-radius:17px;padding:10px;background:#fff;box-shadow:0 2px 12px rgba(7,59,45,.045)}.product:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(7,59,45,.1)}.pic{height:clamp(130px,13vw,190px);border-radius:13px;background:#f7f8f5}.pic img{object-fit:contain;object-position:center;padding:5px}.product h3{font-size:15px;color:#123a2c}.pfoot .add{min-width:46px;border-radius:10px;background:#fff;border:1.5px solid #078447;color:#078447}.pfoot .add:hover{background:#078447;color:#fff}
+.benefits{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;padding:20px clamp(18px,5vw,82px);background:#f0f7ef;border-bottom:1px solid #e5eee5}.benefit{display:flex;align-items:center;justify-content:center;gap:14px;padding:6px 16px;border-right:1px solid #cbdccf}.benefit:last-child{border-right:0}.benefit-icon{font-size:29px;line-height:1;color:#078447}.benefit strong{display:block;color:#123a2c;font-size:15px}.benefit span{display:block;color:#62776b;font-size:13px;margin-top:4px}.shop-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}.shop-heading h2{margin-bottom:22px}.view-all{border:0;border-radius:999px;padding:12px 20px;background:#eaf4eb;color:#073b2d;font-weight:800}
+@media(max-width:1100px){#products{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:800px){header{padding:10px 14px;gap:10px;flex-wrap:wrap}.logo{font-size:17px}header #search{order:3;max-width:none;width:100%;flex-basis:100%;margin:2px 0}.hero{grid-template-columns:1fr;padding:32px 18px;gap:20px;min-height:0}.hero h1{font-size:clamp(40px,10vw,58px);letter-spacing:-1.7px}.art{min-height:210px;max-height:300px;aspect-ratio:1.5}.benefits{grid-template-columns:repeat(2,minmax(0,1fr));padding:12px}.benefit{justify-content:flex-start;padding:13px 10px;border-right:0}.benefit:nth-child(odd){border-right:1px solid #cbdccf}.benefit-icon{font-size:24px}#products{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}section#shop{padding:34px 14px 45px}}
+@media(max-width:380px){header .logo{font-size:15px}.hero h1{font-size:39px}.benefit{gap:8px;padding:10px 6px}.benefit strong{font-size:13px}.benefit span{font-size:11px}}
+
+/* Center product photos */
+.pic {
+  width: 100%;
+  height: 170px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #ffffff;
+  border-radius: 12px;
+}
+
+.pic img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  display: block;
+  margin: auto;
+}
+
+/* Frish & Frish product image alignment */
+.product .pic {
+  width: 100%;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #ffffff;
+  border-radius: 14px;
+}
+
+.product .pic img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  margin: auto;
+}
+
+@media (max-width: 600px) {
+  .product .pic {
+    height: 200px;
+  }
+}
+
+/* Frish & Frish - Premium product design */
+.product {
+  background: #ffffff;
+  border: 1px solid #e8f0e8;
+  border-radius: 18px;
+  padding: 12px;
+  box-shadow: 0 4px 14px rgba(18, 59, 43, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 9px 22px rgba(18, 59, 43, 0.12);
+}
+
+.product .pic {
+  background: #f7faf5;
+  border-radius: 13px;
+  overflow: hidden;
+}
+
+.product h3 {
+  color: #123b2b;
+  font-size: 15px;
+  font-weight: 700;
+  margin: 12px 0 5px;
+}
+
+.product small {
+  color: #68796e;
+  line-height: 1.5;
+}
+
+.product .pfoot {
+  margin-top: 12px;
+  align-items: center;
+}
+
+.product .pfoot b {
+  color: #123b2b;
+  font-size: 16px;
+}
+
+.product .add {
+  background: #ffffff;
+  color: #168447;
+  border: 1px solid #168447;
+  border-radius: 10px;
+  font-weight: 800;
+  min-width: 38px;
+  min-height: 36px;
+  cursor: pointer;
+}
+
+.product .add:hover {
+  background: #168447;
+  color: #ffffff;
+}
+
+#filters button {
+  border-radius: 22px;
+  padding: 9px 17px;
+  margin: 4px;
+  transition: background 0.2s ease;
+}
+
+#filters button.active {
+  background: #168447;
+  color: #ffffff;
+}
+
+#shop {
+  background: linear-gradient(180deg, #ffffff 0%, #f7fbf6 100%);
+}
+
+@media (max-width: 600px) {
+  .product {
+    padding: 8px;
+    border-radius: 13px;
+  }
+
+  .product h3 {
+    font-size: 20px;
+  }
+}
+
+
+/* Frish & Frish admin login and dashboard refinements */
+.login {
+  width: min(430px, calc(100% - 32px));
+  padding: 30px;
+  border: 1px solid #e0ece3;
+  border-radius: 22px;
+  background: linear-gradient(160deg, #fff, #f5fbf6);
+  box-shadow: 0 28px 90px rgba(7,59,45,.24);
+}
+.login:before {
+  content: "🌿 FRISH & FRISH";
+  display: block;
+  margin: 0 0 18px;
+  color: #078447;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 1.6px;
+}
+.login h2 { margin: 4px 0 20px; font-size: 27px; }
+.login label { font-size: 13px; margin: 15px 0; }
+.login label input { min-height: 46px; border-radius: 11px; }
+.login #signIn { width: 100%; min-height: 48px; margin-top: 8px; }
+.login .muted { text-align: center; }
+#content select { padding: 7px; border: 1px solid var(--line); border-radius: 8px; background: white; color: var(--ink); }
+#content .panel { padding: 20px; }
+#content .metrics { margin-bottom: 18px; }
+
+
+/* Inline product quantity stepper, synchronized with the basket */
+.product-qty {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 112px;
+  min-height: 38px;
+  padding: 3px;
+  border: 1px solid #078447;
+  border-radius: 10px;
+  background: #078447;
+  color: #fff;
+}
+.product-qty button {
+  width: 30px;
+  height: 30px;
+  display: inline-grid;
+  place-items: center;
+  border: 0;
+  border-radius: 7px;
+  background: #fff;
+  color: #078447;
+  font-size: 20px;
+  line-height: 1;
+  font-weight: 800;
+  cursor: pointer;
+}
+.product-qty b {
+  min-width: 14px;
+  text-align: center;
+  color: #fff;
+  font-size: 15px;
+}
+.product .pfoot { gap: 8px; }
+@media (max-width: 480px) {
+  .product-qty { min-width: 94px; gap: 7px; }
+  .product-qty button { width: 27px; height: 27px; }
+}
