@@ -14,23 +14,39 @@ if (typeof loadOffer === "function") loadOffer();
   // Auth routing is handled by the admin-checked listener below.
   // Do not open the admin dashboard merely because any user signed in via customer OTP.
 }
-
 async function loadProducts(){
-  let {data,error}=await db.from("products").select("*").order("created_at",{ascending:false});
+  let {data,error}=await db
+    .from("products")
+    .select("*")
+    .order("created_at",{ascending:false});
+
   if(error){
+    console.error("PRODUCT LOAD ERROR:",error);
     $("products").textContent="Could not load products. Check setup.";
     return;
   }
   ps=data||[];
-  console.log("LOADED PRODUCTS:", data);
-  console.log("PRODUCT COUNT:", data?.length);
-  cats=["All",...new Set(ps.map(p=>p.category).filter(Boolean))];
-  $("filters").innerHTML=cats.map(x=>`<button class="${x===cat?"active":""}" onclick="setCat('${esc(x)}')">${esc(x)}</button>`).join("");
-  drawProducts();
-  if(channel)db.removeChannel(channel);
-  channel=db.channel("products-live").on("postgres_changes",{event:"*",schema:"public",table:"products"},loadProducts).subscribe();
-}
 
+  console.log("MANGO CHECK:",ps.filter(p =>
+    String(p.name||"").toLowerCase().includes("mango")
+  ));
+  console.log("LOADED PRODUCTS:",data);
+  console.log("PRODUCT COUNT:",data?.length);
+
+  cats=["All",...new Set(ps.map(p=>p.category).filter(Boolean))];
+
+  $("filters").innerHTML=cats.map(x =>
+    `<button class="${x===cat?"active":""}" onclick="setCat('${esc(x)}')">${esc(x)}</button>`
+  ).join("");
+
+  drawProducts();
+
+  if(channel) db.removeChannel(channel);
+
+  channel=db.channel("products-live")
+    .on("postgres_changes",{event:"*",schema:"public",table:"products"},loadProducts)
+    .subscribe();
+}
 window.setCat=x=>{
   cat=x;
   $("filters").querySelectorAll("button").forEach(b=>b.classList.toggle("active",b.textContent===x));
