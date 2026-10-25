@@ -343,3 +343,33 @@ section#shop{padding:38px clamp(20px,4.8vw,78px) 64px}h2{color:#073b2d}#filters 
 .order-card-foot>strong{font-size:16px}
 .reorder-btn{white-space:nowrap}
 @media(max-width:640px){.order-history{padding:0 14px 16px;margin:24px auto}.order-card{padding:14px}.order-card-head{flex-direction:column}.order-card-foot{align-items:flex-start;flex-direction:column}.order-card-foot .btn{width:100%}}
+/* SOLD OUT product appearance */
+.product.sold-out {
+  opacity: 0.72;
+}
+
+.product.sold-out .pic img {
+  opacity: 0.45;
+  filter: grayscale(65%);
+}
+
+.product .pic {
+  position: relative;
+}
+
+.product.sold-out .pic::after {
+  content: "SOLD OUT";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-12deg);
+  background: #c62828;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 900;
+  padding: 8px 13px;
+  border-radius: 5px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px #0003;
+}
