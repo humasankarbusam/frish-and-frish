@@ -141,6 +141,7 @@ if(!name||!address||!/^[6-9]\d{9}$/.test(phone))return alert("Enter name, delive
 
   basket=[];
   drawCart();
+  drawProducts(); // Reset product cards so the old quantity disappears after ordering.
   cartOpen(false);
   window.open("https://wa.me/917729015126?text="+encodeURIComponent(msg),"_blank");
   alert("Order saved! WhatsApp will open so you can send the details.");
