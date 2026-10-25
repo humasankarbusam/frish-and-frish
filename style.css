@@ -322,3 +322,24 @@ section#shop{padding:38px clamp(20px,4.8vw,78px) 64px}h2{color:#073b2d}#filters 
   .product-qty { min-width: 94px; gap: 7px; }
   .product-qty button { width: 27px; height: 27px; }
 }
+
+
+/* Customer order history */
+.order-history{max-width:1180px;margin:32px auto;padding:0 22px 18px}
+.order-history h2{margin:0}
+.order-empty{padding:22px;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--muted);line-height:1.6}
+.order-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;margin:14px 0;box-shadow:var(--shadow)}
+.order-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.order-card-head>div{display:grid;gap:4px}
+.order-card-head small{font-size:10px;letter-spacing:1.2px;color:var(--muted);font-weight:800}
+.order-card-head strong{font-size:17px;color:var(--d);overflow-wrap:anywhere}
+.order-date{font-size:12px;color:var(--muted)}
+.order-status{display:inline-flex;align-items:center;border-radius:999px;padding:7px 11px;background:#edf8f0;color:#168447;font-size:12px;font-weight:800;text-transform:capitalize;white-space:nowrap}
+.status-cancelled{background:#fff0f0;color:#b42318}
+.status-out_for_delivery,.status-packing{background:#fff7e6;color:#975a00}
+.status-delivered{background:#e8f7ed;color:#167443}
+.order-items{margin:14px 0;padding-left:20px;color:var(--ink);line-height:1.8}
+.order-card-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:12px;border-top:1px solid var(--line)}
+.order-card-foot>strong{font-size:16px}
+.reorder-btn{white-space:nowrap}
+@media(max-width:640px){.order-history{padding:0 14px 16px;margin:24px auto}.order-card{padding:14px}.order-card-head{flex-direction:column}.order-card-foot{align-items:flex-start;flex-direction:column}.order-card-foot .btn{width:100%}}

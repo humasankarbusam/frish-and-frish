@@ -143,6 +143,7 @@ if(!name||!address||!/^[6-9]\d{9}$/.test(phone))return alert("Enter name, delive
   drawCart();
   drawProducts(); // Reset product cards so the old quantity disappears after ordering.
   cartOpen(false);
+  await loadCustomerOrders();
   window.open("https://wa.me/917729015126?text="+encodeURIComponent(msg),"_blank");
   alert("Order saved! WhatsApp will open so you can send the details.");
 };
@@ -261,12 +262,15 @@ $("logout")?.addEventListener("click", async () => {
 
 db?.auth.onAuthStateChange((_event, session) => {
   sessionUser = session?.user || null;
+  updateCustomerLoginStatus();
   if (sessionUser) {
+    setTimeout(() => loadCustomerOrders(), 0);
     setTimeout(async () => {
       if (await isCurrentUserAdmin()) openAdmin();
     }, 0);
   } else {
     closeAdmin();
+    $("orderHistory")?.classList.add("hidden");
   }
 });
 
@@ -278,6 +282,61 @@ function showCustomerAuth(show) {
   $("overlay")?.classList.toggle("hidden", !show);
   if (show) $("customerAuthMethod")?.focus();
 }
+
+async function loadCustomerOrders() {
+  const section = $("orderHistory");
+  const list = $("myOrdersList");
+  if (!section || !list) return;
+  const { data: { user }, error: authError } = await db.auth.getUser();
+  if (!db || authError || !user) {
+    section.classList.add("hidden");
+    list.innerHTML = "";
+    return;
+  }
+  section.classList.remove("hidden");
+  list.innerHTML = '<div class="order-empty">Loading your orders…</div>';
+  const { data, error } = await db.from("orders")
+    .select("id,order_number,items,total,status,created_at")
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false })
+    .limit(50);
+  if (error) {
+    list.innerHTML = `<div class="order-empty">Could not load orders: ${esc(error.message)}<br><small>Check the Customers read own orders policy.</small></div>`;
+    return;
+  }
+  if (!data || !data.length) {
+    list.innerHTML = '<div class="order-empty">No orders yet. Your orders will appear here after you place one.</div>';
+    return;
+  }
+  list.innerHTML = data.map(o => {
+    const date = o.created_at ? new Date(o.created_at).toLocaleString("en-IN", { dateStyle:"medium", timeStyle:"short" }) : "";
+    const items = Array.isArray(o.items) ? o.items : [];
+    const lines = items.map(i => `<li>${esc(i.name || "Product")} × ${Number(i.qty || 1)} — ${rs(i.line_total ?? (Number(i.price||0)*Number(i.qty||1)))}</li>`).join("");
+    return `<article class="order-card">
+      <div class="order-card-head"><div><small>ORDER NUMBER</small><strong>${esc(o.order_number || o.id)}</strong><span class="order-date">${esc(date)}</span></div><span class="order-status status-${esc(String(o.status||"new").toLowerCase().replace(/[^a-z0-9_-]/g,""))}">${esc(String(o.status||"new").replaceAll("_"," "))}</span></div>
+      <ul class="order-items">${lines}</ul>
+      <div class="order-card-foot"><strong>Total: ${rs(o.total)}</strong><button type="button" class="btn reorder-btn" data-reorder="${esc(o.id)}">🔁 Reorder</button></div>
+    </article>`;
+  }).join("");
+  list.querySelectorAll("[data-reorder]").forEach(btn => btn.addEventListener("click", () => {
+    const order = data.find(o => String(o.id) === btn.dataset.reorder);
+    if (!order) return;
+    let added = 0, unavailable = [];
+    (Array.isArray(order.items) ? order.items : []).forEach(old => {
+      const p = ps.find(x => String(x.id) === String(old.product_id));
+      if (!p || !p.is_available || Number(p.stock_qty) <= 0) { unavailable.push(old.name || "A product"); return; }
+      const qty = Math.min(Math.max(1, Number(old.qty)||1), Number(p.stock_qty));
+      const current = basket.find(x => String(x.id) === String(p.id));
+      if (current) current.qty = Math.min(Number(p.stock_qty), current.qty + qty);
+      else basket.push({id:p.id, qty});
+      added++;
+    });
+    drawCart(); drawProducts(); cartOpen(true);
+    if (unavailable.length) alert("Some products are currently unavailable: " + unavailable.join(", "));
+    else if (!added) alert("These products are currently unavailable.");
+  }));
+}
+
 function updateCustomerLoginStatus() {
   const status = $("customerLoginStatus");
   const button = $("customerLoginBtn");
@@ -286,6 +345,20 @@ function updateCustomerLoginStatus() {
   status.textContent = user ? (user.email || user.phone || "Logged in") : "";
   button.textContent = user ? "Account / Sign out" : "Login";
 }
+$("myOrdersBtn")?.addEventListener("click", async () => {
+  if (!db) return alert("Supabase connection is not ready. Please check config.js.");
+  const { data: { user } } = await db.auth.getUser();
+  if (!user) {
+    showCustomerAuth(true);
+    $("customerAuthMessage").textContent = "Please log in to view your orders.";
+    return;
+  }
+  $("orderHistory")?.classList.remove("hidden");
+  await loadCustomerOrders();
+  $("orderHistory")?.scrollIntoView({ behavior:"smooth", block:"start" });
+});
+$("refreshOrders")?.addEventListener("click", loadCustomerOrders);
+
 $("customerLoginBtn")?.addEventListener("click", async () => {
   if (!db) return alert("Supabase connection is not ready. Please check config.js.");
   const { data: { user } } = await db.auth.getUser();
@@ -294,6 +367,7 @@ $("customerLoginBtn")?.addEventListener("click", async () => {
       await db.auth.signOut();
       sessionUser = null;
       updateCustomerLoginStatus();
+      $("orderHistory")?.classList.add("hidden");
       alert("Signed out.");
     }
     return;
@@ -364,6 +438,7 @@ $("verifyCustomerOtp")?.addEventListener("click", async () => {
     $("customerAuthMessage").textContent = "Login successful. You can now place your order.";
     showCustomerAuth(false);
     updateCustomerLoginStatus();
+    await loadCustomerOrders();
     if (!$("name").value.trim()) $("name").focus();
   } catch (err) {
     $("customerAuthMessage").textContent = "OTP verification failed: " + (err.message || "Check the code and try again.");
