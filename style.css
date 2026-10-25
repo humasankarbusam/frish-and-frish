@@ -356,20 +356,23 @@ section#shop{padding:38px clamp(20px,4.8vw,78px) 64px}h2{color:#073b2d}#filters 
 .product .pic {
   position: relative;
 }
-
-.product.sold-out .pic::after {
-  content: "SOLD OUT";
+/* Large, tilted SOLD OUT label */
+.product.sold-out .pic {
+  position: relative;
+}
+.product.sold-out .sold-out-label {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(-12deg);
-  background: #c62828;
+  background: #d60000;
   color: #fff;
-  font-size: 13px;
+  font-size: 20px;
   font-weight: 900;
-  padding: 8px 13px;
-  border-radius: 5px;
-  letter-spacing: 1px;
+  padding: 12px 20px;
+  border-radius: 6px;
+  letter-spacing: 1.5px;
   white-space: nowrap;
-  box-shadow: 0 2px 8px #0003;
+  box-shadow: 0 3px 10px #0004;
+  z-index: 5;
 }
