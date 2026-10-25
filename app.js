@@ -157,10 +157,10 @@ $("place").onclick=async()=>{
  let name=$("name").value.trim(),phone=$("phone").value.trim(),address=$("address").value.trim(),notes=$("notes").value.trim();
 let paymentMethod=$("paymentMethod")?.value || "cod";
 let paymentText=paymentMethod==="upi"
-  ? "Google Pay / PhonePe (UPI) - Pay on Delivery"
+  ? "Google Pay / PhonePe (UPI) - Online Payment"
   : "Cash on Delivery";
-  if (!phone && customerUser.phone) phone = customerUser.phone;
 
+if (!phone && customerUser.phone) phone = customerUser.phone;
 
 if(!name||!address||!/^[6-9]\d{9}$/.test(phone))return alert("Enter name, delivery address and valid 10-digit mobile number.");
   let items=basket.map(i=>{
@@ -179,6 +179,19 @@ if(!name||!address||!/^[6-9]\d{9}$/.test(phone))return alert("Enter name, delive
   if(error)return alert("Order failed: "+error.message);
 
   let total=items.reduce((s,i)=>s+i.line_total,0);
+  if (paymentMethod === "upi") {
+  const upiId = "huma94@axl";
+  const upiUrl = `upi://pay?pa=${upiId}&pn=Frish%20%26%20Frish&am=${total.toFixed(2)}&cu=INR&tn=${encodeURIComponent("Frish & Frish Order " + data.order_number)}`;
+
+  const payNow = confirm(
+    `Order saved successfully!\nTotal: ${rs(total)}\n\nGoogle Pay / PhonePe ద్వారా ఇప్పుడు చెల్లించాలా?`
+  );
+
+if (payNow) {
+  window.location.href = upiUrl;
+  return;
+}
+  }
 let msg=[
   "*Frish & Frish Order*",
   "Order: "+data.order_number,
