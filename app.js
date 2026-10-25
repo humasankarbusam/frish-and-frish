@@ -11,10 +11,8 @@ function init(){
   
 if (typeof loadOffer === "function") loadOffer();
 
-  db.auth.onAuthStateChange((_e,s)=>{
-    sessionUser=s?.user||null;
-    if(sessionUser)openAdmin();
-  });
+  // Auth routing is handled by the admin-checked listener below.
+  // Do not open the admin dashboard merely because any user signed in via customer OTP.
 }
 
 async function loadProducts(){
