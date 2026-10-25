@@ -4,7 +4,17 @@
 <section class="benefits"><div class="benefit"><div class="benefit-icon">🌿</div><div><strong>100% Fresh</strong><span>Farm to your home</span></div></div><div class="benefit"><div class="benefit-icon">🚚</div><div><strong>Fast Delivery</strong><span>In your area</span></div></div><div class="benefit"><div class="benefit-icon">🛡️</div><div><strong>Best Quality</strong><span>Handpicked with care</span></div></div><div class="benefit"><div class="benefit-icon">🏷️</div><div><strong>Great Prices</strong><span>More value for you</span></div></div></section>
 <div id="offers" class="offer hidden"></div><section id="orderHistory" class="order-history hidden"><div class="shop-heading"><h2>📦 My Orders</h2><button id="refreshOrders" class="btn light" type="button">Refresh</button></div><div id="myOrdersList"></div></section><section id="shop"><small>SHOP YOUR FAVOURITES</small><div class="shop-heading"><h2>Fresh picks for you</h2><a class="view-all" href="#shop">View All →</a></div><div id="filters"></div><div id="products">Connect your backend to load products.</div></section>
 <section class="how"><h2>Good food in three simple steps.</h2><p>Choose products → Confirm your address → We confirm your order on WhatsApp.</p></section><footer>🌿 FRISH &amp; FRISH · Fresh. Fast. Everyday. · <a href="https://wa.me/917729015126">WhatsApp 7729015126</a></footer>
-<div id="overlay" class="overlay hidden"></div><aside id="cart" class="drawer hidden"><button id="closeCart" class="close">×</button><h2>Your basket</h2><div id="cartRows"></div><h3>Total: <span id="total">₹0</span></h3><label>Name<input id="name" required></label><label>Mobile<input id="phone" inputmode="numeric" required></label><label>Delivery address<textarea id="address" required></textarea></label><label>Notes<input id="notes"></label><button id="place" class="btn">Place order</button><p class="muted">Order is saved to the database; WhatsApp opens to send order details.</p></aside>
+<div id="overlay" class="overlay hidden"></div><aside id="cart" class="drawer hidden"><button id="closeCart" class="close">×</button><h2>Your basket</h2><div id="cartRows"></div><h3>Total: <span id="total">₹0</span></h3><label>Name<input id="name" required></label><label>Mobile<input id="phone" inputmode="numeric" required></label><label>Delivery address<textarea id="address" required></textarea></label>
+
+<label>Payment Method / చెల్లింపు విధానం
+<select id="paymentMethod" required>
+
+  <option value="cod">Cash on Delivery (నగదు)</option>
+  <option value="upi">Google Pay / PhonePe (UPI)</option>
+</select>
+</label>
+
+<label>Notes<input id="notes"></label><button id="place" class="btn">Place order</button><p class="muted">Order is saved to the database; WhatsApp opens to send order details.</p></aside>
 <div id="customerAuth" class="login hidden" style="z-index:1002">
   <button id="closeCustomerAuth" class="close" type="button">×</button>
   <h2>Customer Login</h2>
