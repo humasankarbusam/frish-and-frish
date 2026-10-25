@@ -38,13 +38,11 @@ window.setCat=x=>{
 };
 function drawProducts(){
   let q=$("search").value.toLowerCase();
-
-  let list=ps.filter(p=>
-    p.is_available &&
+let list=ps.filter(p=>
+    (p.is_available || Number(p.stock_qty)<=0) &&
     (cat==="All"||p.category===cat) &&
     (`${p.name} ${p.category}`).toLowerCase().includes(q)
   );
-
   $("products").innerHTML=list.map(p=>{
     const soldOut=Number(p.stock_qty)<=0;
     const item=basket.find(i=>i.id===p.id);
