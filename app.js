@@ -181,7 +181,8 @@ if(!name||!address||!/^[6-9]\d{9}$/.test(phone))return alert("Enter name, delive
   let total=items.reduce((s,i)=>s+i.line_total,0);
   if (paymentMethod === "upi") {
   const upiId = "huma94@axl";
-  const upiUrl = `upi://pay?pa=${upiId}&pn=Frish%20%26%20Frish&am=${total.toFixed(2)}&cu=INR&tn=${encodeURIComponent("Frish & Frish Order " + data.order_number)}`;
+
+const upiUrl = `upi://pay?pa=${upiId}&pn=Frish%20%26%20Frish&am=${total.toFixed(2)}&cu=INR&tn=${encodeURIComponent("Order " + data.order_number)}`;
 
   const payNow = confirm(
     `Order saved successfully!\nTotal: ${rs(total)}\n\nGoogle Pay / PhonePe ద్వారా ఇప్పుడు చెల్లించాలా?`
