@@ -291,8 +291,8 @@ if (signInBtn) {
     }
   });
 }
-
 $("back")?.addEventListener("click", closeAdmin);
+
 $("logout")?.addEventListener("click", async () => {
   if (db) await db.auth.signOut();
   closeAdmin();
@@ -301,8 +301,8 @@ $("logout")?.addEventListener("click", async () => {
 db?.auth.onAuthStateChange((_event, session) => {
   sessionUser = session?.user || null;
   updateCustomerLoginStatus();
+
   if (sessionUser) {
-    setTimeout(() => loadCustomerOrders(), 0);
     setTimeout(async () => {
       if (await isCurrentUserAdmin()) openAdmin();
     }, 0);
@@ -326,13 +326,13 @@ async function loadCustomerOrders() {
   const list = $("myOrdersList");
   if (!section || !list) return;
   const { data: { user }, error: authError } = await db.auth.getUser();
-  if (!db || authError || !user) {
-    section.classList.add("hidden");
-    list.innerHTML = "";
-    return;
-  }
-  section.classList.remove("hidden");
-  list.innerHTML = '<div class="order-empty">Loading your orders…</div>';
+if (!db || authError || !user) {
+  section.classList.add("hidden");
+  list.innerHTML = "";
+  return;
+}
+
+list.innerHTML = '<div class="order-empty">Loading your orders…</div>';
   const { data, error } = await db.from("orders")
     .select("id,order_number,items,total,status,created_at")
     .eq("user_id", user.id)
