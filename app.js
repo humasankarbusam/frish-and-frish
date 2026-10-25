@@ -154,7 +154,11 @@ $("place").onclick=async()=>{
     return;
   }
 
-  let name=$("name").value.trim(),phone=$("phone").value.trim(),address=$("address").value.trim(),notes=$("notes").value.trim();
+ let name=$("name").value.trim(),phone=$("phone").value.trim(),address=$("address").value.trim(),notes=$("notes").value.trim();
+let paymentMethod=$("paymentMethod")?.value || "cod";
+let paymentText=paymentMethod==="upi"
+  ? "Google Pay / PhonePe (UPI) - Pay on Delivery"
+  : "Cash on Delivery";
   if (!phone && customerUser.phone) phone = customerUser.phone;
 
 
@@ -175,8 +179,17 @@ if(!name||!address||!/^[6-9]\d{9}$/.test(phone))return alert("Enter name, delive
   if(error)return alert("Order failed: "+error.message);
 
   let total=items.reduce((s,i)=>s+i.line_total,0);
-  let msg=["*Frish & Frish Order*","Order: "+data.order_number,...items.map(i=>`${i.name} × ${i.qty} = ${rs(i.line_total)}`),`Total: ${rs(total)}`,`Name: ${name}`,`Phone: ${phone}`,`Address: ${address}`,notes].filter(Boolean).join("\n");
-
+let msg=[
+  "*Frish & Frish Order*",
+  "Order: "+data.order_number,
+  ...items.map(i=>`${i.name} × ${i.qty} = ${rs(i.line_total)}`),
+  `Total: ${rs(total)}`,
+  `Payment Method: ${paymentText}`,
+  `Name: ${name}`,
+  `Phone: ${phone}`,
+  `Address: ${address}`,
+  notes
+].filter(Boolean).join("\n");
   basket=[];
   drawCart();
   drawProducts(); // Reset product cards so the old quantity disappears after ordering.
