@@ -36,20 +36,44 @@ window.setCat=x=>{
   $("filters").querySelectorAll("button").forEach(b=>b.classList.toggle("active",b.textContent===x));
   drawProducts();
 };
-
 function drawProducts(){
   let q=$("search").value.toLowerCase();
-  let list=ps.filter(p=>p.is_available&&p.stock_qty>0&&(cat==="All"||p.category===cat)&&(`${p.name} ${p.category}`).toLowerCase().includes(q));
+
+  let list=ps.filter(p=>
+    p.is_available &&
+    (cat==="All"||p.category===cat) &&
+    (`${p.name} ${p.category}`).toLowerCase().includes(q)
+  );
+
   $("products").innerHTML=list.map(p=>{
+    const soldOut=Number(p.stock_qty)<=0;
     const item=basket.find(i=>i.id===p.id);
     const qty=item?item.qty:0;
-    const control=qty>0
-      ? `<div class="product-qty"><button class="qty-minus" aria-label="Decrease ${esc(p.name)} quantity" onclick="productQty('${p.id}',-1)">−</button><b>${qty}</b><button class="qty-plus" aria-label="Increase ${esc(p.name)} quantity" onclick="productQty('${p.id}',1)">+</button></div>`
-      : `<button class="add" aria-label="Add ${esc(p.name)} to basket" onclick="add('${p.id}')">+</button>`;
-    return `<article class="product"><div class="pic">${p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}">`:esc(p.emoji||"🥬")}</div><h3>${esc(p.name)}</h3><small>${esc(p.unit||"each")} · ${esc(p.category)} ${p.offer_text?"· "+esc(p.offer_text):""}</small><div class="pfoot"><b>${rs(p.price)}</b>${control}</div></article>`;
+
+    const control=soldOut
+      ? `<button class="add" disabled style="opacity:.5;cursor:not-allowed">0</button>`
+      : qty>0
+        ? `<div class="product-qty">
+             <button class="qty-minus" aria-label="Decrease ${esc(p.name)} quantity" onclick="productQty('${p.id}',-1)">−</button>
+             <b>${qty}</b>
+             <button class="qty-plus" aria-label="Increase ${esc(p.name)} quantity" onclick="productQty('${p.id}',1)">+</button>
+           </div>`
+        : `<button class="add" aria-label="Add ${esc(p.name)} to basket" onclick="add('${p.id}')">+</button>`;
+
+    return `
+      <article class="product ${soldOut?'sold-out':''}">
+        <div class="pic">
+          ${p.image_url
+            ? `<img src="${esc(p.image_url)}" alt="${esc(p.name)}" onerror="this.style.display='none'">`
+            : esc(p.emoji||"🥬")}
+          ${soldOut?'<span class="sold-out-label">SOLD OUT</span>':""}
+        </div>
+        <h3>${esc(p.name)}</h3>
+        <small>${esc(p.unit||"each")} · ${esc(p.category)} ${p.offer_text?"· "+esc(p.offer_text):""}</small>
+        <div class="pfoot"><b>${rs(p.price)}</b>${control}</div>
+      </article>`;
   }).join("")||"<p>No products available currently.</p>";
 }
-
 $("search").oninput=drawProducts;
 
 window.add=id=>{
