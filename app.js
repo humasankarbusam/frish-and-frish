@@ -361,8 +361,8 @@ if (!db || authError || !user) {
 
 list.innerHTML = '<div class="order-empty">Loading your orders…</div>';
   const { data, error } = await db.from("orders")
-    .select("id,order_number,items,total,status,created_at")
-    .eq("user_id", user.id)
+.select("id,order_number,items,total,status,payment_status,created_at")
+.eq("user_id", user.id)
     .order("created_at", { ascending: false })
     .limit(50);
   if (error) {
@@ -380,7 +380,16 @@ list.innerHTML = '<div class="order-empty">Loading your orders…</div>';
     return `<article class="order-card">
       <div class="order-card-head"><div><small>ORDER NUMBER</small><strong>${esc(o.order_number || o.id)}</strong><span class="order-date">${esc(date)}</span></div><span class="order-status status-${esc(String(o.status||"new").toLowerCase().replace(/[^a-z0-9_-]/g,""))}">${esc(String(o.status||"new").replaceAll("_"," "))}</span></div>
       <ul class="order-items">${lines}</ul>
-      <div class="order-card-foot"><strong>Total: ${rs(o.total)}</strong><button type="button" class="btn reorder-btn" data-reorder="${esc(o.id)}">🔁 Reorder</button></div>
+    <div class="order-card-foot">
+  <div>
+    <strong>Total: ${rs(o.total)}</strong>
+    <div style="margin-top:8px;font-size:14px;">
+      Payment Status:
+      <strong>${esc(String(o.payment_status || "pending").replaceAll("_"," "))}</strong>
+    </div>
+  </div>
+  <button type="button" class="btn reorder-btn" data-reorder="${esc(o.id)}">🔁 Reorder</button>
+</div>
     </article>`;
   }).join("");
   list.querySelectorAll("[data-reorder]").forEach(btn => btn.addEventListener("click", () => {
@@ -650,14 +659,47 @@ async function renderAdminTab(tab = "overview") {
       content.innerHTML = `<div class="panel">Could not load orders: ${esc(error.message)}</div>`;
       return;
     }
-    content.innerHTML = `<div class="tablewrap"><table class="data"><thead><tr><th>Order</th><th>Customer</th><th>Phone</th><th>Total</th><th>Status</th><th>Update</th></tr></thead><tbody>${
-      (data || []).map(o => `<tr><td>${esc(o.order_number)}</td><td>${esc(o.customer_name)}</td><td>${esc(o.phone)}</td><td>${rs(o.total)}</td><td>${esc(o.status)}</td><td><select data-order-status="${esc(o.id)}">${["new","confirmed","packing","out_for_delivery","delivered","cancelled"].map(s => `<option value="${s}" ${o.status===s?"selected":""}>${s.replaceAll("_"," ")}</option>`).join("")}</select></td></tr>`).join("")
-    }</tbody></table></div>`;
+  content.innerHTML = `<div class="tablewrap"><table class="data"><thead><tr><th>Order</th><th>Customer</th><th>Phone</th><th>Total</th><th>Order Status</th><th>Update Order</th><th>Payment Status</th></tr></thead><tbody>${
+    (data || []).map(o => `<tr>
+  <td>${esc(o.order_number || o.id)}</td>
+  <td>${esc(o.customer_name)}</td>
+  <td>${esc(o.phone)}</td>
+  <td>${rs(o.total)}</td>
+  <td>${esc(o.status)}</td>
+  <td>
+    <select data-order-status="${esc(o.id)}">
+      ${["new","confirmed","packing","out_for_delivery","delivered","cancelled"].map(s => `<option value="${s}" ${o.status===s?"selected":""}>${s.replaceAll("_"," ")}</option>`).join("")}
+    </select>
+  </td>
+  <td>
+    <select data-payment-status="${esc(o.id)}">
+      ${["pending","paid"].map(s => `<option value="${s}" ${String(o.payment_status || "pending")===s?"selected":""}>${s.toUpperCase()}</option>`).join("")}
+    </select>
+  </td>
+</tr>`).join("")
+      }</tbody></table></div>`;
     content.querySelectorAll("[data-order-status]").forEach(sel => sel.addEventListener("change", async () => {
       const { error: updateError } = await db.from("orders").update({ status: sel.value }).eq("id", sel.dataset.orderStatus);
       if (updateError) alert("Could not update order: " + updateError.message);
       else renderAdminTab("ordersTab");
     }));
+    content.querySelectorAll("[data-payment-status]").forEach(sel => sel.addEventListener("change", async () => {
+  const newStatus = sel.value;
+  sel.disabled = true;
+
+  const { error: updateError } = await db
+    .from("orders")
+    .update({ payment_status: newStatus })
+    .eq("id", sel.dataset.paymentStatus);
+
+  if (updateError) {
+    alert("Could not update payment status: " + updateError.message);
+  } else {
+    alert("Payment status updated to " + newStatus.toUpperCase());
+  }
+
+  await renderAdminTab("ordersTab");
+}));
     return;
   }
 
